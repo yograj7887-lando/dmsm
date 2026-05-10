@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOIR & CO — Men's Fashion</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syncopate:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --border: #2a2a2a;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --white: #f0ece4;
+    --muted: #6b6b6b;
+    --text: #d4cfc7;
+    --red: #c0392b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom Cursor */
+  .cursor {
+    width: 10px; height: 10px;
+    background: var(--gold);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s ease;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.15s ease, width 0.2s, height 0.2s;
+    mix-blend-mode: difference;
+  }
+
+  /* HEADER */
+  header {
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 4rem;
+    height: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+    animation: slideDown 0.8s ease forwards;
+  }
+
+  @keyframes slideDown {
+    from { transform: translateY(-100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .logo {
+    font-family: 'Syncopate', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .logo span { color: var(--gold); }
+
+  nav { display: flex; gap: 2.5rem; align-items: center; }
+  nav a {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    cursor: none;
+  }
+  nav a:hover { color: var(--gold); }
+
+  .header-actions { display: flex; align-items: center; gap: 1.5rem; }
+
+  .search-toggle, .cart-btn {
+    background: none; border: none;
+    color: var(--muted); cursor: none;
+    transition: color 0.3s;
+    font-size: 1.1rem;
+    position: relative;
+  }
+  .search-toggle:hover, .cart-btn:hover { color: var(--gold); }
+
+  .cart-count {
+    position: absolute; top: -8px; right: -8px;
+    background: var(--gold); color: var(--bg);
+    border-radius: 50%; width: 18px; height: 18px;
+    font-size: 0.65rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+    opacity: 0; transform: scale(0);
+    transition: all 0.3s;
+  }
+  .cart-count.visible { opacity: 1; transform: scale(1); }
+
+  /* SEARCH BAR */
+  .search-bar {
+    position: fixed; top: 72px; left: 0; width: 100%;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1.2rem 4rem;
+    z-index: 999;
+    transform: translateY(-100%);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .search-bar.open { transform: translateY(0); opacity: 1; }
+  .search-inner {
+    display: flex; align-items: center; gap: 1rem;
+    max-width: 600px; margin: 0 auto;
+  }
+  .search-inner input {
+    flex: 1; background: none; border: none;
+    border-bottom: 1px solid var(--gold);
+    color: var(--white); font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem; padding: 0.5rem 0;
+    outline: none; letter-spacing: 0.05em;
+  }
+  .search-inner input::placeholder { color: var(--muted); font-style: italic; }
+  .search-inner button {
+    background: none; border: none; color: var(--gold);
+    cursor: none; font-size: 1rem;
+  }
+
+  /* HERO */
+  .hero {
+    height: 100vh;
+    display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    padding: 0 4rem;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1208 50%, #0a0a0a 100%);
+  }
+  .hero-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 70% 50%, rgba(201,168,76,0.08) 0%, transparent 70%);
+  }
+
+  .hero-lines {
+    position: absolute; right: 0; top: 0;
+    width: 55%; height: 100%;
+    opacity: 0.04;
+    background: repeating-linear-gradient(
+      90deg, var(--gold) 0px, var(--gold) 1px, transparent 1px, transparent 60px
+    );
+  }
+
+  .hero-content {
+    position: relative; z-index: 1;
+    max-width: 700px;
+    animation: fadeUp 1s ease 0.3s both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-tag {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .hero-tag::before {
+    content: ''; width: 40px; height: 1px; background: var(--gold);
+  }
+
+  h1.hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.01em;
+  }
+  h1.hero-title em { font-style: italic; color: var(--gold-light); }
+
+  .hero-desc {
+    font-size: 0.95rem; line-height: 1.8; color: var(--muted);
+    margin-bottom: 2.5rem; max-width: 420px;
+    letter-spacing: 0.03em;
+  }
+
+  .hero-btns { display: flex; gap: 1rem; align-items: center; }
+
+  .btn-primary {
+    background: var(--gold); color: var(--bg);
+    padding: 0.9rem 2.2rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem; font-weight: 500;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    border: none; cursor: none;
+    transition: all 0.3s;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+  .btn-ghost {
+    background: none; color: var(--white);
+    padding: 0.9rem 2rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem; letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: 1px solid var(--border); cursor: none;
+    transition: all 0.3s; text-decoration: none;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+  .hero-img {
+    position: absolute; right: 4rem; top: 50%;
+    transform: translateY(-50%);
+    width: 380px; height: 540px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    animation: fadeUp 1s ease 0.6s both;
+  }
+  .hero-img-inner {
+    width: 100%; height: 100%;
+    background: linear-gradient(160deg, #1a1a1a 0%, #0f0d09 100%);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 1rem;
+  }
+  .hero-mannequin {
+    font-size: 5rem; opacity: 0.15;
+  }
+  .hero-img-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem; color: var(--gold); opacity: 0.6;
+    letter-spacing: 0.2em; text-transform: uppercase;
+  }
+
+  .hero-float-tag {
+    position: absolute; bottom: -20px; left: -20px;
+    background: var(--gold); padding: 1rem 1.5rem;
+    color: var(--bg);
+  }
+  .hero-float-tag .num {
+    font-family: 'Syncopate', sans-serif;
+    font-size: 1.5rem; font-weight: 700; display: block;
+  }
+  .hero-float-tag .label {
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+  }
+
+  /* CATEGORIES STRIP */
+  .categories {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 1.2rem 4rem;
+    display: flex; gap: 3rem; align-items: center;
+    overflow-x: auto;
+  }
+  .cat-item {
+    font-size: 0.7rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--muted);
+    white-space: nowrap; cursor: none;
+    transition: color 0.3s; padding: 0.3rem 0;
+    border-bottom: 1px solid transparent;
+  }
+  .cat-item:hover, .cat-item.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* SECTION TITLE */
+  .section-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 3rem;
+  }
+  .section-tag {
+    font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.8rem;
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .section-tag::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+  h2.section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300; color: var(--white);
+    line-height: 1.1;
+  }
+  .view-all {
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none; cursor: none;
+    transition: color 0.3s; border-bottom: 1px solid transparent;
+  }
+  .view-all:hover { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* PRODUCTS GRID */
+  section.products { padding: 6rem 4rem; }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5px;
+  }
+
+  .product-card {
+    background: var(--surface);
+    position: relative; overflow: hidden;
+    cursor: none;
+    animation: fadeUp 0.6s ease both;
+  }
+  .product-card:nth-child(2) { animation-delay: 0.1s; }
+  .product-card:nth-child(3) { animation-delay: 0.2s; }
+  .product-card:nth-child(4) { animation-delay: 0.3s; }
+
+  .product-img {
+    height: 320px;
+    background: var(--surface2);
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .product-emoji { font-size: 3.5rem; opacity: 0.2; transition: transform 0.5s; }
+  .product-card:hover .product-emoji { transform: scale(1.1); }
+
+  .product-img-bg {
+    position: absolute; inset: 0;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .product-card:hover .product-img-bg { transform: scale(1.05); }
+
+  .product-badge {
+    position: absolute; top: 1rem; left: 1rem;
+    background: var(--gold); color: var(--bg);
+    font-size: 0.6rem; font-weight: 700;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+  }
+
+  .product-actions {
+    position: absolute; bottom: -60px; left: 0; right: 0;
+    padding: 1rem;
+    transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex; gap: 0.5rem;
+  }
+  .product-card:hover .product-actions { bottom: 0; }
+
+  .add-cart-btn {
+    flex: 1; background: var(--gold); color: var(--bg);
+    border: none; padding: 0.7rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem; font-weight: 500;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    cursor: none; transition: background 0.3s;
+  }
+  .add-cart-btn:hover { background: var(--gold-light); }
+
+  .wishlist-btn {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--white); padding: 0.7rem 1rem;
+    cursor: none; transition: all 0.3s;
+  }
+  .wishlist-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+  .product-info { padding: 1.5rem; }
+  .product-brand {
+    font-size: 0.65rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 0.4rem;
+  }
+  .product-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; font-weight: 400; color: var(--white);
+    margin-bottom: 0.8rem; line-height: 1.3;
+  }
+  .product-price-row { display: flex; align-items: center; justify-content: space-between; }
+  .product-price {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem; font-weight: 500; color: var(--gold);
+  }
+  .product-price-old {
+    font-size: 0.8rem; color: var(--muted);
+    text-decoration: line-through; margin-left: 0.5rem;
+  }
+  .product-rating { display: flex; gap: 2px; }
+  .star { color: var(--gold); font-size: 0.65rem; }
+
+  /* BANNER */
+  .banner {
+    margin: 0 4rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    position: relative; overflow: hidden;
+  }
+  .banner::before {
+    content: '';
+    position: absolute; right: -100px; top: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+  }
+  .banner-content { position: relative; z-index: 1; }
+  .banner-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 8rem; font-weight: 300;
+    color: var(--gold); opacity: 0.15;
+    position: absolute; top: -2rem; left: 0;
+    line-height: 1;
+  }
+  .banner-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300; color: var(--white);
+    line-height: 1.1;
+    position: relative; z-index: 1;
+    max-width: 500px;
+  }
+  .banner-text em { font-style: italic; color: var(--gold); }
+
+  /* CART SIDEBAR */
+  .cart-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 2000;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.4s;
+  }
+  .cart-overlay.open { opacity: 1; pointer-events: all; }
+
+  .cart-sidebar {
+    position: fixed; right: 0; top: 0;
+    width: 440px; height: 100vh;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    z-index: 2001;
+    transform: translateX(100%);
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex; flex-direction: column;
+  }
+  .cart-sidebar.open { transform: translateX(0); }
+
+  .cart-header {
+    padding: 2rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .cart-title {
+    font-family: 'Syncopate', sans-serif;
+    font-size: 0.85rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--white);
+  }
+  .cart-close {
+    background: none; border: none; color: var(--muted);
+    font-size: 1.2rem; cursor: none; transition: color 0.3s;
+  }
+  .cart-close:hover { color: var(--gold); }
+
+  .cart-items { flex: 1; overflow-y: auto; padding: 1.5rem; }
+
+  .cart-item {
+    display: flex; gap: 1rem;
+    padding: 1.2rem 0; border-bottom: 1px solid var(--border);
+  }
+  .cart-item-img {
+    width: 70px; height: 90px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; flex-shrink: 0;
+    opacity: 0.7;
+  }
+  .cart-item-info { flex: 1; }
+  .cart-item-brand { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+  .cart-item-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem; color: var(--white); margin: 0.2rem 0;
+  }
+  .cart-item-price { font-size: 0.85rem; color: var(--gold); }
+  .cart-item-qty {
+    display: flex; align-items: center; gap: 0.8rem;
+    margin-top: 0.6rem;
+  }
+  .qty-btn {
+    background: none; border: 1px solid var(--border);
+    color: var(--muted); width: 24px; height: 24px;
+    font-size: 0.8rem; cursor: none;
+    transition: all 0.3s; display: flex; align-items: center; justify-content: center;
+  }
+  .qty-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .qty-val { font-size: 0.85rem; color: var(--white); min-width: 20px; text-align: center; }
+
+  .remove-item {
+    background: none; border: none; color: var(--muted);
+    cursor: none; font-size: 1rem; transition: color 0.3s;
+    align-self: flex-start;
+  }
+  .remove-item:hover { color: var(--red); }
+
+  .cart-empty {
+    text-align: center; padding: 4rem 2rem;
+    color: var(--muted);
+  }
+  .cart-empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.3; }
+  .cart-empty p { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-style: italic; }
+
+  .cart-footer {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .cart-summary { margin-bottom: 1.5rem; }
+  .cart-row {
+    display: flex; justify-content: space-between;
+    padding: 0.5rem 0; font-size: 0.85rem; color: var(--muted);
+  }
+  .cart-row.total {
+    border-top: 1px solid var(--border); margin-top: 0.5rem;
+    padding-top: 1rem; color: var(--white);
+    font-family: 'Cormorant Garamond', serif; font-size: 1.2rem;
+  }
+  .cart-row.total span:last-child { color: var(--gold); }
+
+  .checkout-btn {
+    width: 100%; background: var(--gold); color: var(--bg);
+    border: none; padding: 1.1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem; font-weight: 500;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    cursor: none; transition: background 0.3s;
+    margin-bottom: 0.8rem;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  }
+  .checkout-btn:hover { background: var(--gold-light); }
+
+  /* CHECKOUT MODAL */
+  .checkout-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.9);
+    z-index: 3000;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.4s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .checkout-overlay.open { opacity: 1; pointer-events: all; }
+
+  .checkout-modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    width: 700px; max-width: 95vw;
+    max-height: 90vh; overflow-y: auto;
+    transform: scale(0.95);
+    transition: transform 0.4s;
+  }
+  .checkout-overlay.open .checkout-modal { transform: scale(1); }
+
+  .checkout-modal-header {
+    padding: 2rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .checkout-modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem; font-weight: 300; color: var(--white);
+  }
+  .checkout-modal-close {
+    background: none; border: none; color: var(--muted);
+    font-size: 1.5rem; cursor: none; transition: color 0.3s;
+  }
+  .checkout-modal-close:hover { color: var(--gold); }
+
+  .checkout-body { padding: 2rem; }
+
+  .checkout-steps {
+    display: flex; gap: 0; margin-bottom: 2.5rem;
+  }
+  .step {
+    flex: 1; text-align: center; position: relative;
+    padding-bottom: 1rem;
+  }
+  .step::after {
+    content: ''; position: absolute;
+    bottom: 0; left: 50%; right: -50%;
+    height: 2px; background: var(--border);
+  }
+  .step:last-child::after { display: none; }
+  .step.active::after { background: var(--gold); }
+  .step-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 1px solid var(--border);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; color: var(--muted);
+    margin-bottom: 0.5rem;
+    transition: all 0.3s;
+  }
+  .step.active .step-num { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.1); }
+  .step.done .step-num { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+  .step-label { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .step.active .step-label { color: var(--gold); }
+
+  .checkout-section { display: none; }
+  .checkout-section.active { display: block; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-bottom: 1.2rem; }
+  .form-group { margin-bottom: 1.2rem; }
+  .form-group.full { grid-column: 1 / -1; }
+  label {
+    display: block;
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 0.6rem;
+  }
+  input[type="text"], input[type="email"], input[type="tel"], input[type="number"], select {
+    width: 100%; background: var(--surface2);
+    border: 1px solid var(--border); color: var(--white);
+    padding: 0.85rem 1rem;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+    outline: none; transition: border-color 0.3s;
+    cursor: none;
+    -webkit-appearance: none;
+  }
+  input:focus, select:focus { border-color: var(--gold); }
+  select option { background: var(--surface2); }
+
+  .payment-methods { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
+  .payment-option {
+    border: 1px solid var(--border); padding: 1.2rem;
+    text-align: center; cursor: none; transition: all 0.3s;
+    font-size: 0.75rem; color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+  .payment-option:hover, .payment-option.selected { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.05); }
+  .payment-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+
+  .order-items-review { margin-bottom: 1.5rem; }
+  .review-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.8rem 0; border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+  }
+  .review-item-name { color: var(--text); font-family: 'Cormorant Garamond', serif; font-size: 1rem; }
+  .review-item-price { color: var(--gold); }
+
+  .order-total-review {
+    display: flex; justify-content: space-between;
+    padding: 1rem 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; color: var(--white);
+  }
+  .order-total-review span:last-child { color: var(--gold); }
+
+  .form-actions { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem; }
+  .btn-next {
+    background: var(--gold); color: var(--bg);
+    border: none; padding: 0.9rem 2.5rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem; font-weight: 500;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    cursor: none; transition: background 0.3s;
+  }
+  .btn-next:hover { background: var(--gold-light); }
+  .btn-prev {
+    background: none; color: var(--muted);
+    border: 1px solid var(--border); padding: 0.9rem 2rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+    cursor: none; transition: all 0.3s;
+  }
+  .btn-prev:hover { border-color: var(--muted); color: var(--white); }
+
+  /* SUCCESS */
+  .success-state {
+    text-align: center; padding: 3rem;
+    animation: fadeUp 0.6s ease;
+  }
+  .success-icon { font-size: 4rem; margin-bottom: 1rem; }
+  .success-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem; font-weight: 300; color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+  .success-num { color: var(--gold); }
+  .success-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+
+  /* NOTIFICATION */
+  .notification {
+    position: fixed; top: 90px; right: 2rem;
+    background: var(--surface);
+    border: 1px solid var(--gold);
+    border-left: 3px solid var(--gold);
+    padding: 1rem 1.5rem;
+    z-index: 4000;
+    transform: translateX(200%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex; align-items: center; gap: 0.8rem;
+    min-width: 280px;
+  }
+  .notification.show { transform: translateX(0); }
+  .notif-icon { color: var(--gold); font-size: 1rem; }
+  .notif-text { font-size: 0.85rem; color: var(--text); }
+  .notif-name { color: var(--white); font-weight: 500; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 4rem 4rem 2rem;
+    margin-top: 6rem;
+  }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+  .footer-brand .logo-text {
+    font-family: 'Syncopate', sans-serif;
+    font-size: 1.2rem; font-weight: 700;
+    color: var(--white); margin-bottom: 1rem;
+    letter-spacing: 0.2em;
+  }
+  .footer-brand .logo-text span { color: var(--gold); }
+  .footer-brand p { font-size: 0.8rem; color: var(--muted); line-height: 1.8; max-width: 260px; }
+  .footer-col h4 {
+    font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.2rem;
+  }
+  .footer-col a {
+    display: block; font-size: 0.8rem; color: var(--muted);
+    text-decoration: none; margin-bottom: 0.6rem;
+    cursor: none; transition: color 0.3s;
+  }
+  .footer-col a:hover { color: var(--white); }
+  .footer-bottom {
+    border-top: 1px solid var(--border);
+    padding-top: 2rem; display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.75rem; color: var(--muted);
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Notification -->
+<div class="notification" id="notification">
+  <span class="notif-icon">✓</span>
+  <div class="notif-text"><span class="notif-name" id="notifName"></span> added to cart</div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <a href="#" class="logo">NOIR<span>&</span>CO</a>
+  <nav>
+    <a href="#">New Arrivals</a>
+    <a href="#">Suits</a>
+    <a href="#">Casual</a>
+    <a href="#">Accessories</a>
+    <a href="#">Sale</a>
+  </nav>
+  <div class="header-actions">
+    <button class="search-toggle" onclick="toggleSearch()" title="Search">⌕</button>
+    <button class="cart-btn" onclick="openCart()" title="Cart">
+      🛍
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- SEARCH BAR -->
+<div class="search-bar" id="searchBar">
+  <div class="search-inner">
+    <input type="text" id="searchInput" placeholder="Search for pieces..." oninput="handleSearch(this.value)">
+    <button onclick="toggleSearch()">✕</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" style="margin-top:72px">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
+  <div class="hero-content">
+    <div class="hero-tag">SS 2026 Collection</div>
+    <h1 class="hero-title">Dress with<br><em>Intent,</em><br>Wear your Truth</h1>
+    <p class="hero-desc">Crafted for the modern man who understands that style is a statement, not a trend.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="document.getElementById('collection').scrollIntoView({behavior:'smooth'})">Shop Collection</button>
+      <a href="#" class="btn-ghost">Lookbook</a>
+    </div>
+  </div>
+  <div class="hero-img">
+    <div class="hero-img-inner">
+      <div class="hero-mannequin">🧥</div>
+      <div class="hero-img-label">New Season</div>
+    </div>
+    <div class="hero-float-tag">
+      <span class="num">24</span>
+      <span class="label">New Pieces</span>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<div class="categories">
+  <div class="cat-item active">All</div>
+  <div class="cat-item">Suits & Blazers</div>
+  <div class="cat-item">Shirts</div>
+  <div class="cat-item">Trousers</div>
+  <div class="cat-item">Outerwear</div>
+  <div class="cat-item">Knitwear</div>
+  <div class="cat-item">Accessories</div>
+  <div class="cat-item">Footwear</div>
+  <div class="cat-item">Sale</div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="products" id="collection">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">Featured</div>
+      <h2 class="section-title">New Arrivals</h2>
+    </div>
+    <a href="#" class="view-all">View All Pieces →</a>
+  </div>
+  <div class="products-grid" id="productsGrid"></div>
+</section>
+
+<!-- BANNER -->
+<div class="banner">
+  <div class="banner-content">
+    <div class="banner-num">30</div>
+    <div class="banner-text">Up to <em>30% off</em><br>on selected<br>summer pieces</div>
+  </div>
+  <div>
+    <button class="btn-primary" style="font-size:0.8rem;padding:1rem 2.5rem">Shop Sale</button>
+  </div>
+</div>
+
+<!-- MORE PRODUCTS -->
+<section class="products">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">Editors' Pick</div>
+      <h2 class="section-title">Best Sellers</h2>
+    </div>
+    <a href="#" class="view-all">View All →</a>
+  </div>
+  <div class="products-grid" id="productsGrid2"></div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo-text">NOIR<span>&</span>CO</div>
+      <p>A curated collection for the discerning modern man. Timeless craft, contemporary vision.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <a href="#">New Arrivals</a>
+      <a href="#">Suits</a>
+      <a href="#">Casualwear</a>
+      <a href="#">Accessories</a>
+      <a href="#">Sale</a>
+    </div>
+    <div class="footer-col">
+      <h4>Help</h4>
+      <a href="#">Size Guide</a>
+      <a href="#">Shipping</a>
+      <a href="#">Returns</a>
+      <a href="#">Care Guide</a>
+      <a href="#">FAQ</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#">About</a>
+      <a href="#">Sustainability</a>
+      <a href="#">Press</a>
+      <a href="#">Careers</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 NOIR & CO. All rights reserved.</span>
+    <span>Privacy Policy · Terms · Cookies</span>
+  </div>
+</footer>
+
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <div class="cart-title">Your Bag <span id="cartItemCount" style="color:var(--muted);font-size:0.75rem"></span></div>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-summary">
+      <div class="cart-row"><span>Subtotal</span><span id="subtotal">₹0</span></div>
+      <div class="cart-row"><span>Shipping</span><span>Free</span></div>
+      <div class="cart-row total"><span>Total</span><span id="cartTotal">₹0</span></div>
+    </div>
+    <button class="checkout-btn" onclick="openCheckout()">Proceed to Checkout</button>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="checkout-overlay" id="checkoutOverlay">
+  <div class="checkout-modal">
+    <div class="checkout-modal-header">
+      <div class="checkout-modal-title">Checkout</div>
+      <button class="checkout-modal-close" onclick="closeCheckout()">✕</button>
+    </div>
+    <div class="checkout-body" id="checkoutBody">
+      <div class="checkout-steps">
+        <div class="step active" id="step1El">
+          <div class="step-num">1</div>
+          <div class="step-label">Delivery</div>
+        </div>
+        <div class="step" id="step2El">
+          <div class="step-num">2</div>
+          <div class="step-label">Payment</div>
+        </div>
+        <div class="step" id="step3El">
+          <div class="step-num">3</div>
+          <div class="step-label">Review</div>
+        </div>
+      </div>
+
+      <!-- Step 1: Delivery -->
+      <div class="checkout-section active" id="checkoutStep1">
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" placeholder="Arjun">
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" placeholder="Desai">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="arjun@example.com">
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" placeholder="+91 98765 43210">
+        </div>
+        <div class="form-group">
+          <label>Address</label>
+          <input type="text" placeholder="Street address">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>City</label>
+            <input type="text" placeholder="Sangli">
+          </div>
+          <div class="form-group">
+            <label>PIN Code</label>
+            <input type="text" placeholder="416416">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>State</label>
+          <select>
+            <option>Maharashtra</option>
+            <option>Delhi</option>
+            <option>Karnataka</option>
+            <option>Tamil Nadu</option>
+            <option>Gujarat</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button class="btn-next" onclick="goStep(2)">Continue to Payment →</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Payment -->
+      <div class="checkout-section" id="checkoutStep2">
+        <div class="payment-methods">
+          <div class="payment-option selected" onclick="selectPayment(this)">
+            <div class="payment-icon">💳</div>
+            <div>Card</div>
+          </div>
+          <div class="payment-option" onclick="selectPayment(this)">
+            <div class="payment-icon">📱</div>
+            <div>UPI</div>
+          </div>
+          <div class="payment-option" onclick="selectPayment(this)">
+            <div class="payment-icon">🏦</div>
+            <div>Net Banking</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Card Number</label>
+          <input type="text" placeholder="4242 4242 4242 4242" maxlength="19" oninput="formatCard(this)">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Expiry</label>
+            <input type="text" placeholder="MM / YY" maxlength="7">
+          </div>
+          <div class="form-group">
+            <label>CVV</label>
+            <input type="text" placeholder="•••" maxlength="4">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Name on Card</label>
+          <input type="text" placeholder="ARJUN DESAI">
+        </div>
+        <div class="form-actions">
+          <button class="btn-prev" onclick="goStep(1)">← Back</button>
+          <button class="btn-next" onclick="goStep(3)">Review Order →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Review -->
+      <div class="checkout-section" id="checkoutStep3">
+        <div class="order-items-review" id="reviewItems"></div>
+        <div class="form-actions">
+          <button class="btn-prev" onclick="goStep(2)">← Back</button>
+          <button class="btn-next" onclick="placeOrder()">Place Order ✓</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  document.addEventListener('mousemove', e => {
+    cursor.style.transform = `translate(${e.clientX - 5}px, ${e.clientY - 5}px)`;
+    ring.style.transform = `translate(${e.clientX - 18}px, ${e.clientY - 18}px)`;
+  });
+
+  // Products Data
+  const products = [
+    { id: 1, name: 'Milano Double-Breasted Blazer', brand: 'Noir & Co', price: 18999, oldPrice: 24999, emoji: '🧥', badge: 'New', rating: 5 },
+    { id: 2, name: 'Oxford Slim-Fit Dress Shirt', brand: 'Noir & Co', price: 4499, oldPrice: null, emoji: '👔', badge: null, rating: 4 },
+    { id: 3, name: 'Cashmere Turtleneck Sweater', brand: 'Noir & Co', price: 9799, oldPrice: 12999, emoji: '🧶', badge: 'Sale', rating: 5 },
+    { id: 4, name: 'Tailored Wool Trousers', brand: 'Noir & Co', price: 7299, oldPrice: null, emoji: '👖', badge: null, rating: 4 },
+    { id: 5, name: 'Leather Derby Shoes', brand: 'Noir & Co', price: 14999, oldPrice: null, emoji: '👞', badge: 'Bestseller', rating: 5 },
+    { id: 6, name: 'Merino Crewneck Pullover', brand: 'Noir & Co', price: 6499, oldPrice: 8499, emoji: '👕', badge: 'Sale', rating: 4 },
+    { id: 7, name: 'Suede Chelsea Boot', brand: 'Noir & Co', price: 12499, oldPrice: null, emoji: '👢', badge: 'New', rating: 5 },
+    { id: 8, name: 'Linen Summer Blazer', brand: 'Noir & Co', price: 11299, oldPrice: 15999, emoji: '🥼', badge: null, rating: 4 },
+  ];
+
+  let cart = [];
+
+  function renderProducts(list, gridId) {
+    const grid = document.getElementById(gridId);
+    grid.innerHTML = list.map(p => `
+      <div class="product-card">
+        <div class="product-img">
+          <div class="product-img-bg" style="background:linear-gradient(160deg,#161410,#1a1a1a)"></div>
+          <div class="product-emoji">${p.emoji}</div>
+          ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
+          <div class="product-actions">
+            <button class="add-cart-btn" onclick="addToCart(${p.id})">Add to Bag</button>
+            <button class="wishlist-btn">♡</button>
+          </div>
+        </div>
+        <div class="product-info">
+          <div class="product-brand">${p.brand}</div>
+          <div class="product-name">${p.name}</div>
+          <div class="product-price-row">
+            <div>
+              <span class="product-price">₹${p.price.toLocaleString('en-IN')}</span>
+              ${p.oldPrice ? `<span class="product-price-old">₹${p.oldPrice.toLocaleString('en-IN')}</span>` : ''}
+            </div>
+            <div class="product-rating">${'★'.repeat(p.rating)}${'☆'.repeat(5 - p.rating)}</div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  renderProducts(products.slice(0, 4), 'productsGrid');
+  renderProducts(products.slice(4, 8), 'productsGrid2');
+
+  function addToCart(id) {
+    const product = products.find(p => p.id === id);
+    const existing = cart.find(i => i.id === id);
+    if (existing) {
+      existing.qty++;
+    } else {
+      cart.push({ ...product, qty: 1 });
+    }
+    updateCart();
+    showNotification(product.name);
+  }
+
+  function updateCart() {
+    const count = cart.reduce((s, i) => s + i.qty, 0);
+    const countEl = document.getElementById('cartCount');
+    countEl.textContent = count;
+    countEl.classList.toggle('visible', count > 0);
+    document.getElementById('cartItemCount').textContent = count > 0 ? `(${count})` : '';
+
+    const cartItems = document.getElementById('cartItems');
+    const cartFooter = document.getElementById('cartFooter');
+
+    if (cart.length === 0) {
+      cartItems.innerHTML = `
+        <div class="cart-empty">
+          <div class="cart-empty-icon">🛍</div>
+          <p>Your bag is empty</p>
+        </div>`;
+      cartFooter.style.display = 'none';
+    } else {
+      cartItems.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <div class="cart-item-img">${item.emoji}</div>
+          <div class="cart-item-info">
+            <div class="cart-item-brand">${item.brand}</div>
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">₹${item.price.toLocaleString('en-IN')}</div>
+            <div class="cart-item-qty">
+              <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
+              <span class="qty-val">${item.qty}</span>
+              <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+            </div>
+          </div>
+          <button class="remove-item" onclick="removeItem(${item.id})">✕</button>
+        </div>
+      `).join('');
+      cartFooter.style.display = 'block';
+      const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      document.getElementById('subtotal').textContent = '₹' + total.toLocaleString('en-IN');
+      document.getElementById('cartTotal').textContent = '₹' + total.toLocaleString('en-IN');
+    }
+  }
+
+  function changeQty(id, delta) {
+    const item = cart.find(i => i.id === id);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+    updateCart();
+  }
+
+  function removeItem(id) {
+    cart = cart.filter(i => i.id !== id);
+    updateCart();
+  }
+
+  function showNotification(name) {
+    document.getElementById('notifName').textContent = name;
+    const n = document.getElementById('notification');
+    n.classList.add('show');
+    setTimeout(() => n.classList.remove('show'), 3000);
+  }
+
+  function openCart() {
+    document.getElementById('cartOverlay').classList.add('open');
+    document.getElementById('cartSidebar').classList.add('open');
+    updateCart();
+  }
+  function closeCart() {
+    document.getElementById('cartOverlay').classList.remove('open');
+    document.getElementById('cartSidebar').classList.remove('open');
+  }
+
+  // Search
+  function toggleSearch() {
+    const bar = document.getElementById('searchBar');
+    bar.classList.toggle('open');
+    if (bar.classList.contains('open')) document.getElementById('searchInput').focus();
+  }
+
+  function handleSearch(val) {
+    const filtered = products.filter(p =>
+      p.name.toLowerCase().includes(val.toLowerCase()) ||
+      p.brand.toLowerCase().includes(val.toLowerCase())
+    );
+    renderProducts(filtered.slice(0, 4), 'productsGrid');
+    if (val) document.getElementById('collection').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Checkout
+  let currentStep = 1;
+
+  function openCheckout() {
+    closeCart();
+    document.getElementById('checkoutOverlay').classList.add('open');
+    goStep(1);
+  }
+  function closeCheckout() {
+    document.getElementById('checkoutOverlay').classList.remove('open');
+  }
+
+  function goStep(n) {
+    currentStep = n;
+    document.querySelectorAll('.checkout-section').forEach((s, i) => {
+      s.classList.toggle('active', i + 1 === n);
+    });
+    document.querySelectorAll('.step').forEach((s, i) => {
+      s.classList.remove('active', 'done');
+      if (i + 1 < n) s.classList.add('done');
+      if (i + 1 === n) s.classList.add('active');
+      // Update step numbers for done steps
+      s.querySelector('.step-num').textContent = i + 1 < n ? '✓' : (i + 1);
+    });
+    if (n === 3) buildReview();
+  }
+
+  function buildReview() {
+    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    document.getElementById('reviewItems').innerHTML = `
+      ${cart.map(item => `
+        <div class="review-item">
+          <span class="review-item-name">${item.emoji} ${item.name} ×${item.qty}</span>
+          <span class="review-item-price">₹${(item.price * item.qty).toLocaleString('en-IN')}</span>
+        </div>
+      `).join('')}
+      <div class="order-total-review">
+        <span>Total</span>
+        <span>₹${total.toLocaleString('en-IN')}</span>
+      </div>
+    `;
+  }
+
+  function selectPayment(el) {
+    document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function formatCard(el) {
+    let v = el.value.replace(/\D/g, '').substring(0, 16);
+    el.value = v.replace(/(.{4})/g, '$1 ').trim();
+  }
+
+  function placeOrder() {
+    const orderId = 'NC' + Math.floor(Math.random() * 900000 + 100000);
+    document.getElementById('checkoutBody').innerHTML = `
+      <div class="success-state">
+        <div class="success-icon">🎉</div>
+        <div class="success-title">Order Placed!</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--muted);margin-bottom:0.5rem">
+          Order ID: <span class="success-num">${orderId}</span>
+        </div>
+        <div class="success-sub">Thank you for shopping with NOIR & CO.<br>A confirmation has been sent to your email.</div>
+        <button class="btn-primary" onclick="closeCheckout();resetCart()">Continue Shopping</button>
+      </div>
+    `;
+  }
+
+  function resetCart() {
+    cart = [];
+    updateCart();
+  }
+
+  updateCart();
+</script>
+</body>
+</html>
